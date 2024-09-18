@@ -1,4 +1,13 @@
-from main import cursor, get_choice, get_input, conn, display_table, current_date
+from InquirerPy import prompt
+from colorama import Fore
+from main import (
+    loading_simulation,
+    session,
+    get_choice,
+    display_table,
+    current_date,
+)
+from initialize_db import Avocado_Varieties, Expense
 
 
 # Expense Tracking
@@ -14,31 +23,89 @@ def expense_menu():
     elif choice == "3":
         return
     else:
-        print("Invalid choice. Try again.")
+        print(Fore.RED + "Invalid choice. Try again.")
 
 
 def log_expense():
-    category = get_input("Enter Expense Category")
-    amount = get_input("Enter Amount")
-    description = get_input("Enter Description")
+    # Fetch avocado varieties from the database
+    varieties = session.query(Avocado_Varieties).all()
+
+    if not varieties:
+        print(Fore.RED + "No avocado varieties found. Please add varieties first.")
+        return
+
+    # Create a list of variety names for selection
+    variety_choices = [variety.name for variety in varieties]
+    questions = [
+        {
+            "type": "list",
+            "name": "tree_type",
+            "message": "Select Tree Variety:",
+            "choices": variety_choices,
+        },
+        {
+            "type": "input",
+            "name": "quantity",
+            "message": "Enter Quantity (number of avocado trees to plant):",
+            "validate": lambda val: val.replace(".", "", 1).isdigit()
+            or "Please enter a valid number.",
+        },
+        {
+            "type": "input",
+            "name": "cost",
+            "message": "Enter cost per Avocado Tree:",
+            "validate": lambda val: val.replace(".", "", 1).isdigit()
+            or "Please enter a valid number.",
+        },
+        {
+            "type": "input",
+            "name": "description",
+            "message": "Enter Description:",
+            "validate": lambda val: val.strip() != "" or "Description cannot be empty.",
+        },
+    ]
+
+    answers = prompt(questions)
+    variety = answers["tree_type"]
+    quantity = answers["quantity"]
+    cost = float(answers["cost"])
+    description = answers["description"]
     date = current_date()
 
-    cursor.execute(
-        """INSERT INTO expenses (category, amount, description, date)
-                      VALUES (?, ?, ?, ?)""",
-        (category, amount, description, date),
-    )
-    conn.commit()
+    loading_simulation("Logging expense")
 
-    print("Expense logged.")
+    try:
+        new_expense = Expense(
+            variety=variety,
+            quantity=quantity,
+            cost=cost,
+            description=description,
+            date=date,
+        )
+        session.add(new_expense)
+        session.commit()
+        print(Fore.GREEN + "Expense logged successfully.")
+    except Exception as e:
+        print(Fore.RED + f"An error occurred: {e}")
+        session.rollback()
 
 
 def view_expenses():
-    cursor.execute("SELECT category, amount, description, date FROM expenses")
-    rows = cursor.fetchall()
+    expenses = session.query(Expense).all()
 
-    if not rows:
-        print("No expense records.")
+    if not expenses:
+        print(Fore.RED + "No expense records.")
     else:
-        headers = ["Category", "Amount", "Description", "Date"]
+        headers = ["Variety", "Quantity", "Cost", "Total Cost", "Description", "Date"]
+        rows = [
+            (
+                exp.variety,
+                exp.quantity,
+                exp.cost,
+                (float(exp.quantity) * float(exp.cost)),
+                exp.description,
+                exp.date,
+            )
+            for exp in expenses
+        ]
         display_table(rows, headers)

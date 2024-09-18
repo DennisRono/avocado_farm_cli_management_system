@@ -1,4 +1,13 @@
-from main import cursor, get_choice, get_input, conn, display_table, current_date
+from InquirerPy import prompt
+from colorama import Fore
+from main import (
+    loading_simulation,
+    session,
+    get_choice,
+    display_table,
+    current_date,
+)
+from initialize_db import Inventory
 
 
 # Inventory Management
@@ -14,31 +23,58 @@ def inventory_menu():
     elif choice == "3":
         return
     else:
-        print("Invalid choice. Try again.")
+        print(Fore.RED + "Invalid choice. Try again.")
 
 
 def log_inventory():
-    quantity = get_input("Enter Quantity (kg)")
-    size = get_input("Enter Size (small/medium/large)")
-    quality = get_input("Enter Quality (Good/Fair/Poor)")
+    questions = [
+        {
+            "type": "input",
+            "name": "quantity",
+            "message": "Enter Quantity (kg):",
+            "validate": lambda val: val.replace(".", "", 1).isdigit()
+            or "Please enter a valid number.",
+        },
+        {
+            "type": "list",
+            "name": "size",
+            "message": "Enter Size:",
+            "choices": ["small", "medium", "large"],
+        },
+        {
+            "type": "list",
+            "name": "quality",
+            "message": "Enter Quality:",
+            "choices": ["Good", "Fair", "Poor"],
+        },
+    ]
+
+    answers = prompt(questions)
+    quantity = float(answers["quantity"])
+    size = answers["size"]
+    quality = answers["quality"]
     date = current_date()
 
-    cursor.execute(
-        """INSERT INTO inventory (quantity, size, quality, date)
-                      VALUES (?, ?, ?, ?)""",
-        (quantity, size, quality, date),
-    )
-    conn.commit()
+    loading_simulation("Logging inventory")
 
-    print("Inventory logged.")
+    try:
+        new_inventory = Inventory(
+            quantity=quantity, size=size, quality=quality, date=date
+        )
+        session.add(new_inventory)
+        session.commit()
+        print(Fore.GREEN + "Inventory logged successfully.")
+    except Exception as e:
+        print(Fore.RED + f"An error occurred: {e}")
+        session.rollback()
 
 
 def view_inventory():
-    cursor.execute("SELECT quantity, size, quality, date FROM inventory")
-    rows = cursor.fetchall()
+    inventory = session.query(Inventory).all()
 
-    if not rows:
-        print("No inventory records.")
+    if not inventory:
+        print(Fore.RED + "No inventory records.")
     else:
         headers = ["Quantity", "Size", "Quality", "Date"]
+        rows = [(inv.quantity, inv.size, inv.quality, inv.date) for inv in inventory]
         display_table(rows, headers)

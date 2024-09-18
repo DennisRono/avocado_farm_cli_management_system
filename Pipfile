@@ -5,6 +5,11 @@ name = "pypi"
 
 [packages]
 tabulate = "*"
+sqlalchemy = "*"
+tdqm = "*"
+colorama = "*"
+inquirer = "*"
+inquirerpy = "*"
 
 [dev-packages]
 

@@ -1,44 +1,72 @@
-from main import get_input, get_choice, cursor, conn, current_date, display_table
+from InquirerPy import prompt
+from colorama import Fore
+from main import (
+    loading_simulation,
+    session,
+    get_choice,
+    display_table,
+    current_date,
+)
+from initialize_db import Irrigation
 
 
 # Irrigation Management
 def irrigation_menu():
-    options = ["1. Log Irrigation Activity", "2. View Irrigation Records", "3. Go Back"]
+    options = ["1. Log Irrigation", "2. View Irrigation Records", "3. Go Back"]
     print("\n".join(options))
     choice = get_choice()
 
     if choice == "1":
-        log_irrigation_activity()
+        log_irrigation()
     elif choice == "2":
         view_irrigation_records()
     elif choice == "3":
         return
     else:
-        print("Invalid choice. Try again.")
+        print(Fore.RED + "Invalid choice. Try again.")
 
 
-def log_irrigation_activity():
-    tree_id = get_input("Enter Tree ID")
-    volume = get_input("Enter Water Volume (liters)")
-    duration = get_input("Enter Duration (minutes)")
+def log_irrigation():
+    questions = [
+        {
+            "type": "input",
+            "name": "volume",
+            "message": "Enter Water Volume (liters):",
+            "validate": lambda val: val.replace(".", "", 1).isdigit()
+            or "Please enter a valid number.",
+        },
+        {
+            "type": "input",
+            "name": "duration",
+            "message": "Enter Duration (hours):",
+            "validate": lambda val: val.replace(".", "", 1).isdigit()
+            or "Please enter a valid number.",
+        },
+    ]
+
+    answers = prompt(questions)
+    volume = float(answers["volume"])
+    duration = float(answers["duration"])
     date = current_date()
 
-    cursor.execute(
-        """INSERT INTO irrigation (tree_id, volume, duration, date)
-                      VALUES (?, ?, ?, ?)""",
-        (tree_id, volume, duration, date),
-    )
-    conn.commit()
+    loading_simulation("Logging irrigation")
 
-    print("Irrigation activity logged.")
+    try:
+        new_irrigation = Irrigation(volume=volume, duration=duration, date=date)
+        session.add(new_irrigation)
+        session.commit()
+        print(Fore.GREEN + "Irrigation logged successfully.")
+    except Exception as e:
+        print(Fore.RED + f"An error occurred: {e}")
+        session.rollback()
 
 
 def view_irrigation_records():
-    cursor.execute("SELECT tree_id, volume, duration, date FROM irrigation")
-    rows = cursor.fetchall()
+    irrigations = session.query(Irrigation).all()
 
-    if not rows:
-        print("No irrigation records.")
+    if not irrigations:
+        print(Fore.RED + "No irrigation records.")
     else:
-        headers = ["Tree ID", "Volume", "Duration", "Date"]
+        headers = ["Volume (liters)", "Duration (hours)", "Date"]
+        rows = [(irr.volume, irr.duration, irr.date) for irr in irrigations]
         display_table(rows, headers)

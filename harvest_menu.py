@@ -1,4 +1,14 @@
-from main import cursor, get_choice, get_input, conn, display_table, current_date
+from InquirerPy import prompt
+from colorama import Fore
+from main import (
+    loading_simulation,
+    session,
+    get_choice,
+    display_table,
+    current_date,
+)
+from initialize_db import Harvest
+from tree_health_monitoring import select_tree
 
 
 # Harvest Planning & Management
@@ -14,30 +24,44 @@ def harvest_menu():
     elif choice == "3":
         return
     else:
-        print("Invalid choice. Try again.")
+        print(Fore.RED + "Invalid choice. Try again.")
 
 
 def log_harvest():
-    tree_id = get_input("Enter Tree ID")
-    quantity = get_input("Enter Quantity Harvested (kg)")
+    id = select_tree()[1]
+
+    questions = [
+        {
+            "type": "input",
+            "name": "quantity",
+            "message": "Enter Quantity Harvested (kg):",
+            "validate": lambda val: val.replace(".", "", 1).isdigit()
+            or "Please enter a valid number.",
+        },
+    ]
+
+    answers = prompt(questions)
+    quantity = float(answers["quantity"])
     date = current_date()
 
-    cursor.execute(
-        """INSERT INTO harvest (tree_id, quantity, date)
-                      VALUES (?, ?, ?)""",
-        (tree_id, quantity, date),
-    )
-    conn.commit()
+    loading_simulation("Logging harvest")
 
-    print("Harvest logged.")
+    try:
+        new_harvest = Harvest(tree_id=id, quantity=quantity, date=date)
+        session.add(new_harvest)
+        session.commit()
+        print(Fore.GREEN + "Harvest logged successfully.")
+    except Exception as e:
+        print(Fore.RED + f"An error occurred: {e}")
+        session.rollback()
 
 
 def view_harvest_records():
-    cursor.execute("SELECT tree_id, quantity, date FROM harvest")
-    rows = cursor.fetchall()
+    harvests = session.query(Harvest).all()
 
-    if not rows:
-        print("No harvest records.")
+    if not harvests:
+        print(Fore.RED + "No harvest records.")
     else:
         headers = ["Tree ID", "Quantity", "Date"]
+        rows = [(har.tree_id, har.quantity, har.date) for har in harvests]
         display_table(rows, headers)
