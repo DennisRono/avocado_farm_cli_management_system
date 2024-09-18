@@ -7,16 +7,13 @@ from colorama import init, Fore, Style
 from tqdm import tqdm
 import time
 
-# Initialize colorama
 init(autoreset=True)
 
-# Set up SQLAlchemy connection
 engine = create_engine("sqlite:///avocado_farm.db")
 Session = sessionmaker(bind=engine)
 session = Session()
 
 
-# Utility functions for input and date handling
 def get_input(prompt):
     return input(f"{Fore.CYAN}{prompt}: {Style.RESET_ALL}").strip()
 
@@ -55,7 +52,6 @@ def get_choice():
     return input(Fore.MAGENTA + ">> " + Style.RESET_ALL)
 
 
-# Main loop
 def main():
     from initialize_db import initialize_db
 

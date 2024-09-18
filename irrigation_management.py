@@ -10,7 +10,6 @@ from main import (
 from initialize_db import Irrigation
 
 
-# Irrigation Management
 def irrigation_menu():
     options = ["1. Log Irrigation", "2. View Irrigation Records", "3. Go Back"]
     print("\n".join(options))

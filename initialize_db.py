@@ -59,6 +59,5 @@ class Expense(Base):
     date = Column(Date)
 
 
-# Initialize the database
 def initialize_db():
     Base.metadata.create_all(engine)

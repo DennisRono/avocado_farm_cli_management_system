@@ -10,6 +10,7 @@ tdqm = "*"
 colorama = "*"
 inquirer = "*"
 inquirerpy = "*"
+requests = "*"
 
 [dev-packages]
 

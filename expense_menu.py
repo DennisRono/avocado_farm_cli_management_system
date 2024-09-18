@@ -10,7 +10,6 @@ from main import (
 from initialize_db import Avocado_Varieties, Expense
 
 
-# Expense Tracking
 def expense_menu():
     options = ["1. Log Expense", "2. View Expenses", "3. Go Back"]
     print("\n".join(options))
@@ -27,14 +26,13 @@ def expense_menu():
 
 
 def log_expense():
-    # Fetch avocado varieties from the database
+
     varieties = session.query(Avocado_Varieties).all()
 
     if not varieties:
         print(Fore.RED + "No avocado varieties found. Please add varieties first.")
         return
 
-    # Create a list of variety names for selection
     variety_choices = [variety.name for variety in varieties]
     questions = [
         {

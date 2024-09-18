@@ -10,7 +10,6 @@ from main import (
 from initialize_db import Tree
 
 
-# Tree Health Monitoring
 def tree_health_menu():
     options = ["1. Log Tree Health", "2. View Tree Health Records", "3. Go Back"]
     print("\n".join(options))
@@ -27,14 +26,11 @@ def tree_health_menu():
 
 
 def select_tree():
-    """Function to display a CLI choice selector for trees."""
     trees = session.query(Tree).all()
-
     if not trees:
         print(Fore.RED + "No trees available in the database.")
         return None
 
-    # Prepare tree options for selection
     tree_choices = [
         (
             f"Tree ID: {tree.id} | Height: {tree.height}m | Leaf Health: {tree.leaf_health}",
@@ -43,7 +39,6 @@ def select_tree():
         for tree in trees
     ]
 
-    # Use InquirerPy to prompt the user for a tree selection
     question = [
         {
             "type": "list",
@@ -64,7 +59,6 @@ def log_tree_health():
         print(Fore.RED + "No tree selected. Aborting operation.")
         return
 
-    # Use InquirerPy to get updated tree health details
     questions = [
         {
             "type": "input",
@@ -89,7 +83,7 @@ def log_tree_health():
     loading_simulation("Logging tree health")
 
     try:
-        # Update the selected tree's health data
+
         tree = session.query(Tree).filter_by(id=id).first()
         if tree:
             if height:

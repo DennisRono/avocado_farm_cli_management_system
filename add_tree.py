@@ -11,7 +11,6 @@ from main import (
 from initialize_db import Avocado_Varieties, Tree
 
 
-# Tree Health Monitoring Menu
 def new_tree_opts():
     options = [
         "1. Add a New Variety",
@@ -40,7 +39,6 @@ def new_tree_opts():
         print(Fore.RED + "Invalid choice. Try again.")
 
 
-# Add a New Avocado Variety
 def add_new_variety():
     name = get_input("Enter Avocado Variety Name")
 
@@ -53,20 +51,17 @@ def add_new_variety():
     print(Fore.GREEN + f"Variety '{name}' added successfully.")
 
 
-# Update an Existing Avocado Variety
 def update_variety():
     varieties = session.query(Avocado_Varieties).all()
 
     if not varieties:
         return
 
-    # Create a list of varieties with IDs for selection
     variety_choices = [
         {"name": f"{variety.id}: {variety.name}", "value": variety.id}
         for variety in varieties
     ]
 
-    # Use InquirerPy to prompt the user to select a variety to update
     questions = [
         {
             "type": "list",
@@ -85,7 +80,6 @@ def update_variety():
     selected_variety_id = answers["selected_variety_id"]
     new_name = answers["new_name"]
 
-    # Fetch the selected variety from the database
     variety = session.query(Avocado_Varieties).filter_by(id=selected_variety_id).first()
 
     if variety:
@@ -99,7 +93,6 @@ def update_variety():
         print(Fore.RED + "Variety not found.")
 
 
-# View All Avocado Varieties
 def view_varieties():
     varieties = session.query(Avocado_Varieties).all()
 
@@ -111,19 +104,16 @@ def view_varieties():
         display_table(rows, headers)
 
 
-# Add a New Tree
 def add_tree():
-    # Fetch avocado varieties from the database
+
     varieties = session.query(Avocado_Varieties).all()
 
     if not varieties:
         print(Fore.RED + "No avocado varieties found. Please add varieties first.")
         return
 
-    # Create a list of variety names for selection
     variety_choices = [variety.name for variety in varieties]
 
-    # Define the questions
     questions = [
         {
             "type": "list",
@@ -165,10 +155,8 @@ def add_tree():
         },
     ]
 
-    # Prompt user for input
     answers = prompt(questions)
 
-    # Convert responses to the appropriate data types
     height = float(answers["height"])
     tree_type = answers["tree_type"]
     leaf_health = answers["leaf_health"]
@@ -176,10 +164,8 @@ def add_tree():
     diameter = float(answers["diameter"])
     pest_infested = answers["pest_infested"]
 
-    # Simulate adding the tree
     loading_simulation("Adding tree")
 
-    # Create and add the new tree entry
     new_tree = Tree(
         height=height,
         variety=tree_type,
@@ -195,7 +181,6 @@ def add_tree():
     print(Fore.GREEN + f"Tree with type '{tree_type}' added successfully.")
 
 
-# View All Trees
 def view_trees():
     trees = session.query(Tree).all()
 

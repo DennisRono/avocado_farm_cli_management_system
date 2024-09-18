@@ -10,7 +10,6 @@ from main import (
 from initialize_db import Inventory
 
 
-# Inventory Management
 def inventory_menu():
     options = ["1. Log Inventory", "2. View Inventory", "3. Go Back"]
     print("\n".join(options))

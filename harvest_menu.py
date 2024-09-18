@@ -11,7 +11,6 @@ from initialize_db import Harvest
 from tree_health_monitoring import select_tree
 
 
-# Harvest Planning & Management
 def harvest_menu():
     options = ["1. Log Harvest", "2. View Harvest Records", "3. Go Back"]
     print("\n".join(options))
