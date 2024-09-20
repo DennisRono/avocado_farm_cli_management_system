@@ -28,7 +28,7 @@ Unfortunately, GitHub Markdown does not support embedding videos using the `<ifr
 
 Click the image below to watch the demo of the **Avocado Farm Management System CLI** on YouTube:
 
-[![Watch the video](https://img.youtube.com/vi/DHfxia5rTgk/maxresdefault.jpg)](https://www.youtube.com/watch?v=DHfxia5rTgk)
+[![Watch the video](https://i9.ytimg.com/vi_webp/DHfxia5rTgk/mqdefault.webp?v=66ed8ca5&sqp=CPCbtrcG&rs=AOn4CLCgcN2asK-BBF_Hun7ngme2tPuu6Q)](https://www.youtube.com/watch?v=DHfxia5rTgk)
 
 ## Features
 
