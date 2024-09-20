@@ -20,7 +20,7 @@ By using a command-line interface (CLI), the system is lightweight and accessibl
 
 ## Presentation
 
-[![Watch the video](https://img.youtube.com/vi/DHfxia5rTgk/maxresdefault.jpg)](https://www.youtube.com/watch?v=DHfxia5rTgk&ab_channel=DennisKibet)
+[!Presentation](https://www.youtube.com/watch?v=DHfxia5rTgk&ab_channel=DennisKibet)
 
 ## Features
 
