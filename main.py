@@ -53,7 +53,7 @@ def get_choice():
 
 
 def main():
-    from initialize_db import initialize_db
+    from initialize_db import initialize_db  # lazy import
 
     initialize_db()
 
