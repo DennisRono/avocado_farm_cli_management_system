@@ -20,7 +20,7 @@ By using a command-line interface (CLI), the system is lightweight and accessibl
 
 ## Presentation
 
-https://github.com/DennisRono/avocado_farm_cli_management_system/blob/main/presentation.mp4
+<iframe width="560" height="315" src="https://www.youtube.com/embed/DHfxia5rTgk?si=z4tjka8V4qZia37R" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ## Features
 
