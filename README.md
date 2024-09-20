@@ -20,6 +20,8 @@ By using a command-line interface (CLI), the system is lightweight and accessibl
 
 ## Presentation
 
+https://github.com/DennisRono/avocado_farm_cli_management_system/blob/main/presentation.mp4
+
 ## Features
 
 ### 1. **Tree Health Monitoring**
