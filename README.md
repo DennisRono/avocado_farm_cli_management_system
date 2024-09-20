@@ -10,12 +10,15 @@ By using a command-line interface (CLI), the system is lightweight and accessibl
 
 ## Table of Contents
 
+- [Presentation](#presentation)
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
 - [License](#license)
 
 ---
+
+## Presentation
 
 ## Features
 
