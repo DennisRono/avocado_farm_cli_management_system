@@ -20,7 +20,15 @@ By using a command-line interface (CLI), the system is lightweight and accessibl
 
 ## Presentation
 
-[!Presentation](https://www.youtube.com/watch?v=DHfxia5rTgk&ab_channel=DennisKibet)
+Unfortunately, GitHub Markdown does not support embedding videos using the `<iframe>` tag. However, you can still link to the YouTube video and create a clickable image that redirects users to the video. Here's how you can achieve a similar result:
+
+---
+
+## Video Demo
+
+Click the image below to watch the demo of the **Avocado Farm Management System CLI** on YouTube:
+
+[![Watch the video](https://img.youtube.com/vi/DHfxia5rTgk/maxresdefault.jpg)](https://www.youtube.com/watch?v=DHfxia5rTgk)
 
 ## Features
 
