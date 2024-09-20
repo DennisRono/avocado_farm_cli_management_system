@@ -82,13 +82,17 @@ def main():
 
             inventory_menu()
         elif choice == "6":
-            print(Fore.YELLOW + "Sales and Distribution feature coming soon!")
+            from sales import sales_management
+
+            sales_management()
         elif choice == "7":
             from expense_menu import expense_menu
 
             expense_menu()
         elif choice == "8":
-            print(Fore.YELLOW + "Reports and Analytics feature coming soon!")
+            from reports import reports_menu
+
+            reports_menu()
         elif choice == "9":
             from weather import view_weather_data
 
@@ -102,4 +106,5 @@ def main():
 
 
 if __name__ == "__main__":
+    print(Fore.GREEN + "Welcome to Avocado Farm Management System!")
     main()

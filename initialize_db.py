@@ -59,5 +59,22 @@ class Expense(Base):
     date = Column(Date)
 
 
+class Sale(Base):
+    __tablename__ = "sales"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    buyer_name = Column(String)
+    quantity = Column(Float)
+    price = Column(Float)
+    date = Column(Date)
+
+
+class Distribution(Base):
+    __tablename__ = "distribution"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    distributor_name = Column(String)
+    quantity = Column(Float)
+    date = Column(Date)
+
+
 def initialize_db():
     Base.metadata.create_all(engine)
